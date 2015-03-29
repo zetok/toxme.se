@@ -43,12 +43,12 @@ DISALLOWED_CHARS = set(" @/")
 # helpers
 
 REC_TRANSFORMERS = {
-    "tox1": lambda r: {
+    "toxdns1": lambda r: {
         "public_key": r["id"],
         "check": r["id"][-4:],
         "version": "Tox V1",
     },
-    "tox2": lambda r: {
+    "toxdns2": lambda r: {
         "public_key": r["pub"],
         "check": r["check"],
         "version": "Tox V2 (PIN required)",
@@ -84,7 +84,7 @@ def _lookup_key_over_dns(domain):
             values = _parse_rec("".join(txt.strings))
         except ValueError:
             continue
-        if values.get("v") != "tox" or values.get("pub") is None:
+        if values.get("v") != "toxdns" or values.get("pub") is None:
             continue
 
         try:
@@ -168,7 +168,7 @@ class DNSCore(object):
             return error_codes.ERROR_LOOKUP_FAILED
         
         if "sign" in record_data:
-            if record_data["v"] == "tox1":
+            if record_data["v"] == "toxdns1":
                 check_text = response["public_key"]
             else:
                 check_text = "".join((response["public_key"][:64],
@@ -197,7 +197,7 @@ class DNSCore(object):
                 continue
 
             v = values.get("v", None)
-            if v not in {"tox1", "tox2"}:
+            if v not in {"toxdns1", "toxdns2"}:
                 continue
 
             response = self._build_response(usr, domain, values)
@@ -259,11 +259,11 @@ class DNSCore(object):
         #        "source": SOURCE_LOCAL
         #    }
         #    if rec.is_public():
-        #        base_ret["version"] = "Tox V1 (local; public)"
+        #        base_ret["version"] = "ToxDNS V1 (local; public)"
         #        base_ret["public_key"] = (rec.public_key + rec.nospam
         #                                  + rec.checksum())
         #    else:
-        #        base_ret["version"] = "Tox V2 (local; requires PIN)"
+        #        base_ret["version"] = "ToxDNS V2 (local; requires PIN)"
         #    return cb(base_ret)
 
 def _print_answer(result):

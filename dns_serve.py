@@ -129,7 +129,7 @@ class ToxResolver(dnslib.server.BaseResolver):
                 if not rec:
                     reply.header.rcode = dnslib.RCODE.NXDOMAIN
                     return reply
-                base = b"v=tox3;id="
+                base = b"v=toxdns3;id="
                 if rec.pin:
                     r_payload = "{0}{1}{2}".format(rec.public_key, rec.pin,
                                                    rec.checksum)

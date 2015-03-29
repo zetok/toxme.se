@@ -47,8 +47,8 @@ class User(BASE):
     def record(self, escaped=1):
         """Return a record for this user, escaping weird bytes in
            octal format.
-           If our PIN is available, we return a tox1 record."""
-        rec = "v=tox1;id={0}{1}{2};sign={3}".format(self.public_key,
+           If our PIN is available, we return a toxdns1 record."""
+        rec = "v=toxdns1;id={0}{1}{2};sign={3}".format(self.public_key,
                                                     self.pin, self.checksum,
                                                     self.sig)
         if escaped:
